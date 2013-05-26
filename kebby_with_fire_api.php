@@ -60,7 +60,7 @@ function kbfire_api_get_imtypes() {
 
 // uc_account_2
 // update user
-//todo:
+//todo: account.php needs a refactor to make errormessage check independent from query building
 
 // uc_account_3
 // select cdc
@@ -187,6 +187,7 @@ function kbfire_api_get_cdc_timelock($sceneid) {
 // create_cache_module("top_demos", "SELECT prods.id, prods.name,prods.type,prods.group1,prods.group2,prods.group3 FROM prods WHERE prods.quand > DATE_SUB(sysdate(),INTERVAL '30' DAY) AND prods.quand < DATE_SUB(sysdate(),INTERVAL '0' DAY) ORDER BY (prods.views/((sysdate()-prods.quand)/100000)+prods.views)*prods.voteavg*prods.voteup desc LIMIT 50",1);
 
 
+
 //
 // affil.php
 //
@@ -204,6 +205,153 @@ function kbfire_api_get_cdc_timelock($sceneid) {
 // " left join prods as p1 on p1.id = affiliatedprods.original ".
 // " left join prods as p2 on p2.id = affiliatedprods.derivative ".
 // "";
+
+
+
+//
+// api/*.php
+//
+// is this v2.0 stuff?!?
+// are any of these beeing used for anything? should they be replaced?
+//
+// leave for later
+// meanwhile poke gargaj for more info
+//
+
+
+
+//
+// awardscandidates.php
+//
+// dont think this will be needed anymore, not worth porting
+//
+
+
+
+//
+// bbs_del.php
+//
+
+// uc_bbs_del_1
+// delete bbs
+// should deletions also be wrapped in jsonp api?
+
+
+
+//
+// bbs.php
+//
+
+// uc_bbs_1
+// $query="SELECT count(0) FROM bbs_topics";
+// if ($_GET["categoryfilter"])
+//  $query.= sprintf(" where bbs_topics.category = %d",$_GET["categoryfilter"]);
+//$result=mysql_query($query);
+//$nb_topics=mysql_result($result,0);
+
+// uc_bbs_2
+//$query="SELECT bbs_topics.id, bbs_topics.topic, bbs_topics.firstpost, bbs_topics.lastpost, bbs_topics.userfirstpost, bbs_topics.userlastpost, bbs_topics.count, bbs_topics.category, users1.nickname as nickname_1, users1.avatar as avatar_1, users2.nickname as nickname_2, users2.avatar as avatar_2 FROM bbs_topics LEFT JOIN users as users2 on users2.id=bbs_topics.userfirstpost LEFT JOIN users as users1 on users1.id=bbs_topics.userlastpost";
+//if ($_GET["categoryfilter"])
+//  $query.= sprintf(" where bbs_topics.category = %d",$_GET["categoryfilter"]);
+//switch($order) {
+//  case "userfirstpost": $query.=" ORDER BY nickname_2, avatar_2, bbs_topics.lastpost //DESC"; break;
+//  case "firstpost": $query.=" ORDER BY firstpost DESC"; break;
+//  case "userlastpost": $query.=" ORDER BY nickname_1, avatar_1, bbs_topics.lastpost DESC"; break;
+//  case "lastpost": $query.=" ORDER BY bbs_topics.lastpost DESC"; break;
+//  case "count": $query.=" ORDER BY bbs_topics.count DESC"; break;
+//  case "topic": $query.=" ORDER BY bbs_topics.topic"; break;
+//  case "category": $query.=" ORDER BY bbs_topics.category"; break;
+//  default: $query.=" ORDER BY bbs_topics.lastpost DESC"; break;
+//}
+//$query.=" LIMIT ".(($page-1)*$topics_per_page).",".$topics_per_page;
+//$result=mysql_query($query);
+//while($tmp=mysql_fetch_assoc($result)) {
+//  $topics[]=$tmp;
+//}
+//$sortlink ="bbs.php?";
+//if ($_GET["categoryfilter"])
+//  $sortlink ="categoryfilter=".$_GET["categoryfilter"]."&amp;";
+//$sortlink.="order=";
+//$pagelink = "bbs.php?order=".$order;
+//if ($_GET["categoryfilter"])
+//  $pagelink .= "&categoryfilter=".$_GET["categoryfilter"]."";
+
+
+
+//
+// bbses.php
+//
+
+// uc_bbses_1
+//
+// this should probably get seperated into 2 use cases, first being which=id and the second the pattern lookup
+//
+// if($which) {
+// 	$query = "SELECT bbs2 from bbsesaka WHERE bbs1=".$which;
+// 	$result = mysql_query($query);
+// 	while($tmp=mysql_fetch_array($result)) {
+// 	  $bbsesaka[]=$tmp;
+// 	}
+//   	$query="SELECT id,name,sysop,started,closed,phonenumber,telnetip,added,adder FROM bbses WHERE id=".$which;
+//   	for($i=0;$i<count($bbsesaka);$i++) { $query.=" OR id=".$bbsesaka[$i]["bbs2"]; }
+// } elseif($pattern) {
+//   if($pattern=="#") {
+//     $sqlwhere="(name LIKE '0%')||(name LIKE '1%')||(name LIKE '2%')||(name LIKE '3%')||(name LIKE '4%')||(name LIKE '5%')||(name LIKE '6%')||(name LIKE '7%')||(name LIKE '8%')||(name LIKE '9%')";
+//   } else {
+//     $sqlwhere="name LIKE '".$pattern."%'";
+//   }
+//   $query="SELECT id,name,phonenumber,telnetip FROM bbses WHERE (".$sqlwhere.") ORDER BY name";
+// }
+// $result = mysql_query($query);
+// while($tmp = mysql_fetch_array($result)) {
+//   $bbses[]=$tmp;
+// }
+// 
+// if($which) {
+//   	//get user who added this bbs
+//   	$query="SELECT id,nickname,avatar FROM users WHERE id=".$bbses[0]["adder"];
+//   	$result=mysql_query($query);
+//   	$myuser=mysql_fetch_array($result);
+// 
+//   	$query="SELECT prods.id, prods.name, prods.group1, groups.name as group1name from prods LEFT JOIN groups on prods.group1=groups.id WHERE prods.boardID=$which";
+// 	$result = mysql_query($query);
+// 	while($tmp = mysql_fetch_array($result)) {
+//   	 $bbstros[]=$tmp;
+// 	}
+// 
+//   	$query="SELECT affiliatedbbses.group,affiliatedbbses.type,groups.name from affiliatedbbses LEFT JOIN groups on affiliatedbbses.group=groups.id WHERE affiliatedbbses.bbs=$which ORDER BY affiliatedbbses.type, groups.name";
+// 	$result = mysql_query($query);
+// 	while($tmp = mysql_fetch_array($result)) {
+//   	 $bbsaffils[]=$tmp;
+// 	}
+// 
+// 	$query="SELECT * from othernfos WHERE type='bbs' and refid='$which'";
+// 	$result = mysql_query($query);
+// 	while($tmp = mysql_fetch_array($result)) {
+//   	 $bbsnfos[]=$tmp;
+// 	}
+// 
+// 	$query="select platforms.name,platforms.icon from bbses_platforms, platforms where bbses_platforms.bbs='".$which."' and platforms.id=bbses_platforms.platform";
+// 	$result = mysql_query($query);
+// 	while($tmp = mysql_fetch_array($result)) {
+//   	 $platforms[]=$tmp;
+// 	}
+// }
+
+
+
+//
+// buttons.php
+//
+
+// uc_buttons_1
+// $query="SELECT type,img,url,alt FROM buttons WHERE dead = 0 ORDER BY type,RAND()";
+// $result=mysql_query($query);
+// while($tmp=mysql_fetch_array($result)) {
+//   $buttons[]=$tmp;
+// }
+
+
 
 
 //todo: document usecases of all remaining .php's
