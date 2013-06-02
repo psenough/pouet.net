@@ -60,7 +60,7 @@ function kbfire_api_get_imtypes() {
 
 // uc_account_2
 // update user
-//todo: account.php needs a refactor to make errormessage check independent from query building
+//todo: account.php needs a refactor to make the errormessage check independent from the query building
 
 // uc_account_3
 // select cdc
@@ -350,6 +350,136 @@ function kbfire_api_get_cdc_timelock($sceneid) {
 // while($tmp=mysql_fetch_array($result)) {
 //   $buttons[]=$tmp;
 // }
+
+
+
+//
+// cdc.php
+//
+
+// uc_cdc_1
+//
+// get all cdc (from the moderators) ordered by date, and their associated prod info
+//
+//$query="SELECT cdc.which,cdc.quand,prods.name,prods.type,prods.group1,prods.group2,prods.group3 FROM cdc,prods WHERE cdc.which=prods.id AND cdc.quand<=NOW() ORDER BY cdc.quand DESC";
+// $result=mysql_query($query);
+// while($tmp=mysql_fetch_array($result)) {
+//   $cdc[]=$tmp;
+// }
+// 
+// for ($i=0; $i<count($cdc); $i++):
+// 	if ($cdc[$i]["group1"]):
+// 		$query="select name,acronym from groups where id='".$cdc[$i]["group1"]."'";
+// 		$result=mysql_query($query);
+// 		while($tmp = mysql_fetch_array($result)) {
+// 		  $cdc[$i]["groupname1"]=$tmp["name"];
+// 		  $cdc[$i]["groupacron1"]=$tmp["acronym"];
+// 		 }
+// 	endif;
+// 	if ($cdc[$i]["group2"]):
+// 		$query="select name,acronym from groups where id='".$cdc[$i]["group2"]."'";
+// 		$result=mysql_query($query);
+// 		while($tmp = mysql_fetch_array($result)) {
+// 		  $cdc[$i]["groupname2"]=$tmp["name"];
+// 		  $cdc[$i]["groupacron2"]=$tmp["acronym"];
+// 		 }
+// 	endif;
+// 	if ($cdc[$i]["group3"]):
+// 		$query="select name,acronym from groups where id='".$cdc[$i]["group3"]."'";
+// 		$result=mysql_query($query);
+// 		while($tmp = mysql_fetch_array($result)) {
+// 		  $cdc[$i]["groupname3"]=$tmp["name"];
+// 		  $cdc[$i]["groupacron3"]=$tmp["acronym"];
+// 		 }
+// 	endif;
+// 
+// 	if (strlen($cdc[$i]["groupname1"].$cdc[$i]["groupname2"].$cdc[$i]["groupname3"])>27):
+// 		if (strlen($cdc[$i]["groupname1"])>10 && $cdc[$i]["groupacron1"]) $cdc[$i]["groupname1"]=$cdc[$i]["groupacron1"];
+// 		if (strlen($cdc[$i]["groupname2"])>10 && $cdc[$i]["groupacron2"]) $cdc[$i]["groupname2"]=$cdc[$i]["groupacron2"];
+// 		if (strlen($cdc[$i]["groupname3"])>10 && $cdc[$i]["groupacron3"]) $cdc[$i]["groupname3"]=$cdc[$i]["groupacron3"];
+// 	endif;
+// 
+// 	$query="select platforms.name from prods_platforms, platforms where prods_platforms.prod='".$cdc[$i]["which"]."' and platforms.id=prods_platforms.platform";
+// 	$result=mysql_query($query);
+// 	$check=0;
+// 	$cdc[$i]["platform"]="";
+// 	while($tmp = mysql_fetch_array($result)) {
+// 	  if ($check>0) $cdc[$i]["platform"].=",";
+// 	  $check++;
+// 	  $cdc[$i]["platform"].=$tmp["name"];
+// 	 }
+// 	 //print($query."<->".$cdc[$i]["platform"]."<br/>");
+// 
+// endfor;
+
+// uc_cdc_2
+//
+// get all personal cdc's (from the users) and their associated info
+//
+// $query=" SELECT distinct prods.id as which,count(prods.id) as count,prods.name,prods.type,prods.group1,prods.group2,prods.group3 FROM users_cdcs JOIN prods WHERE users_cdcs.cdc=prods.id group by prods.id order by count desc";
+// $result=mysql_query($query);
+// while($tmp=mysql_fetch_array($result)) {
+//   $pcdc[]=$tmp;
+// }
+// for ($i=0; $i<count($pcdc); $i++):
+// 	if ($pcdc[$i]["group1"]):
+// 		$query="select name,acronym from groups where id='".$pcdc[$i]["group1"]."'";
+// 		$result=mysql_query($query);
+// 		while($tmp = mysql_fetch_array($result)) {
+// 		  $pcdc[$i]["groupname1"]=$tmp["name"];
+// 		  $pcdc[$i]["groupacron1"]=$tmp["acronym"];
+// 		 }
+// 	endif;
+// 	if ($pcdc[$i]["group2"]):
+// 		$query="select name,acronym from groups where id='".$pcdc[$i]["group2"]."'";
+// 		$result=mysql_query($query);
+// 		while($tmp = mysql_fetch_array($result)) {
+// 		  $pcdc[$i]["groupname2"]=$tmp["name"];
+// 		  $pcdc[$i]["groupacron2"]=$tmp["acronym"];
+// 		 }
+// 	endif;
+// 	if ($pcdc[$i]["group3"]):
+// 		$query="select name,acronym from groups where id='".$pcdc[$i]["group3"]."'";
+// 		$result=mysql_query($query);
+// 		while($tmp = mysql_fetch_array($result)) {
+// 		  $pcdc[$i]["groupname3"]=$tmp["name"];
+// 		  $pcdc[$i]["groupacron3"]=$tmp["acronym"];
+// 		 }
+// 	endif;
+// 
+// 	if (strlen($pcdc[$i]["groupname1"].$pcdc[$i]["groupname2"].$pcdc[$i]["groupname3"])>27):
+// 		if (strlen($pcdc[$i]["groupname1"])>10 && $pcdc[$i]["groupacron1"]) $pcdc[$i]["groupname1"]=$pcdc[$i]["groupacron1"];
+// 		if (strlen($pcdc[$i]["groupname2"])>10 && $pcdc[$i]["groupacron2"]) $pcdc[$i]["groupname2"]=$pcdc[$i]["groupacron2"];
+// 		if (strlen($pcdc[$i]["groupname3"])>10 && $pcdc[$i]["groupacron3"]) $pcdc[$i]["groupname3"]=$pcdc[$i]["groupacron3"];
+// 	endif;
+// 
+// 	$query="select platforms.name from prods_platforms, platforms where prods_platforms.prod='".$pcdc[$i]["which"]."' and platforms.id=prods_platforms.platform";
+// 	$result=mysql_query($query);
+// 	$check=0;
+// 	$pcdc[$i]["platform"]="";
+// 	while($tmp = mysql_fetch_array($result)) {
+// 	  if ($check>0) $pcdc[$i]["platform"].=",";
+// 	  $check++;
+// 	  $pcdc[$i]["platform"].=$tmp["name"];
+// 	 }
+// 
+// endfor;
+
+
+
+//
+// checkplatformicons.php
+//
+
+// uc_checkplatformicons_1
+//
+// $query="select platforms.name, platforms.icon from platforms order by platforms.name asc";
+// $result=mysql_query($query);
+// while($tmp = mysql_fetch_array($result)) {
+// 	 $platforms[]=$tmp;
+// }
+
+
 
 
 
